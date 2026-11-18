@@ -1,0 +1,24 @@
+fluxo-oficina-ds
+Copyright (c) 2026 Gustavo Antunes. Licenciado sob a MIT License (veja LICENSE).
+
+Este projeto foi escrito do zero. Ele usa, ou se baseia na API e na estrutura de,
+projetos abertos listados abaixo. Cada um mantém a sua própria licença e os seus
+avisos de direitos autorais.
+
+- shadcn/ui, MIT. https://github.com/shadcn-ui/ui
+  Modelo de componentes copiáveis, nomes e variantes dos componentes web.
+- Radix UI Primitives, MIT. https://github.com/radix-ui/primitives
+  Primitivos acessíveis dos componentes web.
+- React Native Reusables, MIT. https://github.com/founded-labs/react-native-reusables
+  Port do shadcn/ui para React Native, base dos componentes nativos.
+- rn-primitives, MIT. https://github.com/roninoss/rn-primitives
+  Primitivos acessíveis dos componentes nativos.
+- NativeWind, MIT. https://github.com/nativewind/nativewind
+  Classes Tailwind em React Native.
+- Tailwind CSS, MIT. https://github.com/tailwindlabs/tailwindcss
+- class-variance-authority, Apache-2.0. https://github.com/joe-bell/cva
+- Inter, SIL Open Font License 1.1. https://github.com/rsms/inter
+  Família tipográfica sans serif do sistema.
+
+A lista é conferida com `license-checker` antes de cada publicação. Dependências
+novas entram aqui no mesmo commit que as traz.

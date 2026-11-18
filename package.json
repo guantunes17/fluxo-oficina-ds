@@ -1,0 +1,15 @@
+{
+  "name": "fluxo-oficina-ds",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Design system do FluxoOficina para web e Expo, baseado no shadcn/ui.",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "contraste": "npm run contraste -w @fluxo-oficina/tokens"
+  },
+  "engines": { "node": ">=20" }
+}
