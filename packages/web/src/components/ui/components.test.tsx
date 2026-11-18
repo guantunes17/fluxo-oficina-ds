@@ -8,6 +8,10 @@ import {
   DialogTrigger, Input, Label, ListItem, NumberStepper, RadioGroup, RadioGroupItem, Select, SelectContent, SelectItem,
   SelectTrigger, SelectValue, Separator, Skeleton, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Tabs,
   TabsContent, TabsList, TabsTrigger, ToggleGroup, ToggleGroupItem, buttonVariants, cn,
+  Accordion, AccordionContent, AccordionItem, AccordionTrigger, AlertList, Avatar, DropdownMenu, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, HoverCard, HoverCardContent,
+  HoverCardTrigger, Kbd, OrderCard, Popover, PopoverContent, PopoverTrigger, PriorityBadge, Progress, StatusDot, Switch,
+  Textarea, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, initialsOf,
 } from '../../index'
 
 async function semViolacoes(container: HTMLElement) {
@@ -19,6 +23,10 @@ async function semViolacoes(container: HTMLElement) {
 describe('utilitário cn', () => {
   it('resolve conflito do Tailwind e descarta falsos', () => {
     expect(cn('px-2', false && 'hidden', 'px-4')).toBe('px-4')
+  })
+  it('papel de tipografia não apaga a cor do texto', () => {
+    expect(cn('text-base text-foreground', 'text-heading-card')).toBe('text-foreground text-heading-card')
+    expect(cn('text-heading-card', 'text-muted-foreground')).toBe('text-heading-card text-muted-foreground')
   })
 })
 
@@ -223,6 +231,110 @@ describe('ListItem e AppBar', () => {
   it('AppBar tem um título de nível 1 e ações', async () => {
     const { container } = render(<AppBar title="Minhas ordens de serviço" actions={<Button size="sm">Atualizar</Button>} />)
     expect(screen.getByRole('heading', { level: 1, name: 'Minhas ordens de serviço' })).toBeInTheDocument()
+    expect(await semViolacoes(container)).toEqual([])
+  })
+})
+
+describe('Textarea, Switch, Progress e Kbd', () => {
+  it('Textarea tem rótulo e aceita texto', async () => {
+    const { container } = render(<><Label htmlFor="obs">Observação</Label><Textarea id="obs" /></>)
+    await userEvent.type(screen.getByLabelText('Observação'), 'Barulho na roda')
+    expect(screen.getByLabelText('Observação')).toHaveValue('Barulho na roda')
+    expect(await semViolacoes(container)).toEqual([])
+  })
+  it('Switch alterna e expõe o estado', async () => {
+    const { container } = render(<Switch aria-label="Avisar o cliente" />)
+    const chave = screen.getByRole('switch', { name: 'Avisar o cliente' })
+    expect(chave).toHaveAttribute('aria-checked', 'false')
+    await userEvent.click(chave)
+    expect(chave).toHaveAttribute('aria-checked', 'true')
+    expect(await semViolacoes(container)).toEqual([])
+  })
+  it('Progress expõe o valor', async () => {
+    const { container } = render(<Progress aria-label="Etapas concluídas" value={40} />)
+    expect(screen.getByRole('progressbar', { name: 'Etapas concluídas' })).toHaveAttribute('aria-valuenow', '40')
+    expect(await semViolacoes(container)).toEqual([])
+  })
+  it('Kbd é um elemento kbd', () => {
+    render(<Kbd>⌘K</Kbd>)
+    expect(screen.getByText('⌘K').tagName).toBe('KBD')
+  })
+})
+
+describe('Accordion, Popover, Tooltip, HoverCard e DropdownMenu', () => {
+  it('Accordion abre e fecha uma seção', async () => {
+    const { container } = render(
+      <Accordion type="single" collapsible>
+        <AccordionItem value="a"><AccordionTrigger>Peças</AccordionTrigger><AccordionContent>Pastilha e disco</AccordionContent></AccordionItem>
+      </Accordion>,
+    )
+    const gatilho = screen.getByRole('button', { name: 'Peças' })
+    expect(gatilho).toHaveAttribute('aria-expanded', 'false')
+    await userEvent.click(gatilho)
+    expect(gatilho).toHaveAttribute('aria-expanded', 'true')
+    expect(await semViolacoes(container)).toEqual([])
+  })
+  it('Popover abre ao clicar', async () => {
+    render(<Popover><PopoverTrigger>Detalhes</PopoverTrigger><PopoverContent>Prazo de 3 dias</PopoverContent></Popover>)
+    await userEvent.click(screen.getByRole('button', { name: 'Detalhes' }))
+    expect(await screen.findByText('Prazo de 3 dias')).toBeInTheDocument()
+  })
+  it('Tooltip mostra a dica quando aberto', () => {
+    render(<TooltipProvider><Tooltip open><TooltipTrigger>Ajuda</TooltipTrigger><TooltipContent>Copiar a placa</TooltipContent></Tooltip></TooltipProvider>)
+    expect(screen.getAllByText('Copiar a placa').length).toBeGreaterThan(0)
+  })
+  it('HoverCard mostra a prévia quando aberto', () => {
+    render(<HoverCard open><HoverCardTrigger>Cliente</HoverCardTrigger><HoverCardContent>Maria Souza</HoverCardContent></HoverCard>)
+    expect(screen.getByText('Maria Souza')).toBeInTheDocument()
+  })
+  it('DropdownMenu lista as ações e dispara a escolhida', async () => {
+    const onSelect = vi.fn()
+    render(
+      <DropdownMenu>
+        <DropdownMenuTrigger>Ações</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>Ordem 1042</DropdownMenuLabel>
+          <DropdownMenuItem onSelect={onSelect}>Mudar etapa</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem destructive>Cancelar ordem</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Ações' }))
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'Mudar etapa' }))
+    expect(onSelect).toHaveBeenCalled()
+  })
+})
+
+describe('Avatar, StatusDot, PriorityBadge, AlertList e OrderCard', () => {
+  it('initialsOf pega a primeira e a última inicial', () => {
+    expect(initialsOf('Carlos Eduardo Mendes')).toBe('CM')
+    expect(initialsOf('Ana')).toBe('A')
+    expect(initialsOf('  ')).toBe('?')
+  })
+  it('Avatar usa o nome como rótulo e mostra as iniciais sem foto', async () => {
+    const { container } = render(<Avatar name="Carlos Mendes" />)
+    expect(screen.getByRole('img', { name: 'Carlos Mendes' })).toBeInTheDocument()
+    expect(screen.getByText('CM')).toBeInTheDocument()
+    expect(await semViolacoes(container)).toEqual([])
+  })
+  it('StatusDot sempre mostra o texto', () => {
+    render(<StatusDot tone="success" label="Fornecedor respondeu" />)
+    expect(screen.getByText('Fornecedor respondeu')).toBeInTheDocument()
+  })
+  it('PriorityBadge leva texto e símbolo', () => {
+    render(<PriorityBadge priority="urgent" />)
+    expect(screen.getByText('Urgente')).toBeInTheDocument()
+    expect(screen.getByText('▲')).toHaveAttribute('aria-hidden', 'true')
+  })
+  it('AlertList é uma lista nomeada de avisos', async () => {
+    const { container } = render(<AlertList items={[{ id: '1', tone: 'danger', title: 'Sem conexão' }, { id: '2', tone: 'info', title: 'Etapa salva', description: 'Cliente avisado' }]} />)
+    expect(screen.getByRole('list', { name: 'Avisos' }).children).toHaveLength(2)
+    expect(await semViolacoes(container)).toEqual([])
+  })
+  it('OrderCard mostra placa, cliente, etapa e prioridade', async () => {
+    const { container } = render(<OrderCard number="OS 1042" vehicle="VW Gol 1.0" plate="ABC1D23" customer="Maria Souza" stage="Aguardando peça" priority="high" mechanic="Carlos" />)
+    for (const t of ['OS 1042', 'ABC1D23', 'Maria Souza', 'Aguardando peça', 'Alta', 'Mecânico: Carlos']) expect(screen.getByText(t)).toBeInTheDocument()
     expect(await semViolacoes(container)).toEqual([])
   })
 })
