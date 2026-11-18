@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "FluxoOficina DS",
+    "slug": "fluxo-oficina-ds-playground",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": { "bundleIdentifier": "dev.fluxooficina.dsplayground" },
+    "android": { "package": "dev.fluxooficina.dsplayground" },
+    "web": { "bundler": "metro" },
+    "plugins": ["expo-font"]
+  }
+}

@@ -1,0 +1,8 @@
+global.css
+dist-ios/
+dist-android/
+dist-web/
+.expo/
+tests/screenshots/
+test-results/
+playwright-report/

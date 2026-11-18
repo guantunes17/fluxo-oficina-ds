@@ -5,11 +5,14 @@
   "license": "MIT",
   "main": "index.ts",
   "scripts": {
-    "start": "expo start",
-    "export:ios": "expo export --platform ios --output-dir dist-ios",
-    "export:android": "expo export --platform android --output-dir dist-android",
-    "export:web": "expo export --platform web --output-dir dist-web",
-    "typecheck": "tsc --noEmit"
+    "start": "npm run css && expo start",
+    "export:ios": "npm run css && expo export --platform ios --output-dir dist-ios",
+    "export:android": "npm run css && expo export --platform android --output-dir dist-android",
+    "export:web": "npm run css && expo export --platform web --output-dir dist-web",
+    "typecheck": "tsc --noEmit",
+    "css": "node scripts-sync-css.mjs",
+    "build": "npm run export:ios && npm run export:android && npm run export:web",
+    "test:browser": "npm run export:web && playwright test"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",
@@ -31,6 +34,9 @@
     "tailwindcss": "^3.4.19"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.55.0",
+    "@types/node": "^26.6.6",
     "@types/react": "~19.3.0",
     "typescript": "~6.0.3"
   }
