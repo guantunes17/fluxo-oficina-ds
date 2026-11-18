@@ -9,6 +9,9 @@
     "./tokens.json": "./src/tokens.json",
     "./tokens.css": "./dist/tokens.css",
     "./tailwind.css": "./dist/tailwind.css",
+    "./native.css": "./dist/native.css",
+    "./global.css": "./dist/global.css",
+    "./tailwind-preset": "./dist/tailwind.preset.cjs",
     "./native": {
       "types": "./dist/theme.native.d.ts",
       "default": "./dist/theme.native.js"

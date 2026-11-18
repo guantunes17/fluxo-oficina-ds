@@ -104,4 +104,48 @@ export interface Theme {
 export declare const theme: Theme
 `,
 )
+
+// ── native.css e tailwind.preset.cjs (NativeWind 4, Tailwind 3) ──────────
+// NativeWind 4 lê variáveis de :root e de .dark:root, e o Tailwind 3 ainda não tem @theme.
+const varsNativas = (cores) => Object.entries(cores).map(([k, v]) => `  --${k}: ${v};`).join('\n')
+writeFileSync(
+  join(dist, 'native.css'),
+  `/* Gerado por scripts/build.mjs. Não edite. Variáveis para o NativeWind 4. */
+:root {
+${varsNativas(claro)}
+}
+
+.dark:root {
+${varsNativas(escuro)}
+}
+`,
+)
+const coresPreset = {
+  ...Object.fromEntries(Object.keys(claro).map((k) => [k, `var(--${k})`])),
+  ...Object.fromEntries(Object.entries(tokens.color).map(([escala, passos]) => [escala, passos])),
+}
+const preset = {
+  theme: {
+    extend: {
+      colors: coresPreset,
+      borderRadius: Object.fromEntries(Object.entries(tokens.radius).map(([k, v]) => [k, `${v}px`])),
+      fontFamily: {
+        sans: ['Inter_400Regular'],
+        'sans-medium': ['Inter_500Medium'],
+        'sans-semibold': ['Inter_600SemiBold'],
+        'sans-bold': ['Inter_700Bold'],
+      },
+      fontSize: Object.fromEntries(Object.entries(tokens.font.size).map(([k, [t, l]]) => [k, [`${t}px`, { lineHeight: `${l}px` }]])),
+      spacing: Object.fromEntries(Object.entries(tokens.spacing).map(([k, v]) => [`t${k}`, `${v}px`])),
+      minHeight: { touch: `${tokens.touch['min-native']}px` },
+      minWidth: { touch: `${tokens.touch['min-native']}px` },
+    },
+  },
+}
+writeFileSync(join(dist, 'tailwind.preset.cjs'), `// Gerado por scripts/build.mjs. Não edite.\nmodule.exports = ${JSON.stringify(preset, null, 2)}\n`)
+// global.css do app Expo: diretivas do Tailwind 3 mais as variáveis, num arquivo só (sem @import).
+writeFileSync(
+  join(dist, 'global.css'),
+  `/* Gerado por scripts/build.mjs. Não edite. */\n@tailwind base;\n@tailwind components;\n@tailwind utilities;\n\n${readFileSync(join(dist, 'native.css'), 'utf8')}`,
+)
 console.log('dist/tokens.css, dist/tailwind.css e dist/theme.native.js gerados.')

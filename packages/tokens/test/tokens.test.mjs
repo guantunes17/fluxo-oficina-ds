@@ -12,7 +12,7 @@ const tokens = JSON.parse(readFileSync(join(raiz, 'src', 'tokens.json'), 'utf8')
 
 test('o build gera os três formatos', () => {
   execFileSync('node', [join(raiz, 'scripts', 'build.mjs')])
-  for (const f of ['tokens.css', 'tailwind.css', 'theme.native.js', 'theme.native.d.ts'])
+  for (const f of ['tokens.css', 'tailwind.css', 'native.css', 'global.css', 'tailwind.preset.cjs', 'theme.native.js', 'theme.native.d.ts'])
     assert.ok(existsSync(join(raiz, 'dist', f)), `falta dist/${f}`)
 })
 
@@ -43,6 +43,25 @@ test('o CSS e o tema nativo trazem a mesma lista de cores semânticas', () => {
 test('todo par de cor declarado passa no contraste WCAG', () => {
   const falhas = conferir(tokens).filter((r) => !r.ok)
   assert.deepEqual(falhas, [], falhas.map((f) => `${f.tema} ${f.frente}/${f.fundo} ${f.razao}`).join('; '))
+})
+
+test('native.css tem :root e .dark:root com as mesmas variáveis', () => {
+  execFileSync('node', [join(raiz, 'scripts', 'build.mjs')])
+  const css = readFileSync(join(raiz, 'dist', 'native.css'), 'utf8')
+  const [claro, escuro] = css.split('.dark:root')
+  for (const nome of Object.keys(tokens.semantic.light)) {
+    assert.match(claro, new RegExp(`--${nome}:`), `native.css claro sem --${nome}`)
+    assert.match(escuro, new RegExp(`--${nome}:`), `native.css escuro sem --${nome}`)
+  }
+})
+
+test('o preset do Tailwind exporta cores semânticas por variável e as famílias do Inter', async () => {
+  execFileSync('node', [join(raiz, 'scripts', 'build.mjs')])
+  const { createRequire } = await import('node:module')
+  const preset = createRequire(import.meta.url)(join(raiz, 'dist', 'tailwind.preset.cjs'))
+  assert.equal(preset.theme.extend.colors.primary, 'var(--primary)')
+  assert.equal(preset.theme.extend.fontFamily.sans[0], 'Inter_400Regular')
+  assert.equal(preset.theme.extend.minHeight.touch, '44px')
 })
 
 test('a fonte padrão é sans serif e termina em sans-serif', () => {
