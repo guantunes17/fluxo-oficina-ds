@@ -5,6 +5,8 @@ import { cn } from '../../lib/utils'
 export const alertVariants = cva('relative w-full rounded-lg border px-4 py-3 text-sm', {
   variants: {
     variant: {
+      neutral: 'border-neutral-border bg-neutral-subtle text-neutral-foreground',
+      highlight: 'border-highlight-border bg-highlight-subtle text-highlight-foreground',
       info: 'border-info-border bg-info-subtle text-info-foreground',
       success: 'border-success-border bg-success-subtle text-success-foreground',
       warning: 'border-warning-border bg-warning-subtle text-warning-foreground',

@@ -10,7 +10,7 @@ export const DialogTrigger = AlertDialogPrimitive.Trigger
 export function DialogContent({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Content>) {
   return (
     <AlertDialogPrimitive.Portal>
-      <AlertDialogPrimitive.Overlay data-slot="dialog-overlay" className="fixed inset-0 z-50 bg-neutro-950/50" />
+      <AlertDialogPrimitive.Overlay data-slot="dialog-overlay" className="fixed inset-0 z-50 bg-overlay" />
       <AlertDialogPrimitive.Content
         data-slot="dialog-content"
         className={cn('fixed left-1/2 top-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg border bg-popover p-6 text-popover-foreground shadow-md sm:max-w-md', className)}

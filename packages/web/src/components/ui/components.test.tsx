@@ -32,6 +32,8 @@ describe('Button', () => {
   it('aplica variante e tamanho', () => {
     expect(buttonVariants({ variant: 'destructive', size: 'lg' })).toContain('bg-destructive')
     expect(buttonVariants({ size: 'sm' })).toContain('h-9')
+    expect(buttonVariants()).toContain('hover:bg-primary-hover')
+    expect(buttonVariants()).toContain('active:bg-primary-active')
   })
   it('respeita o disabled e não dispara o clique', async () => {
     const onClick = vi.fn()
@@ -58,6 +60,12 @@ describe('Card, Badge, Separator e Skeleton', () => {
     expect(screen.getByText('b').className).toContain('bg-warning-subtle')
     expect(screen.getByText('c').className).toContain('bg-danger-subtle')
   })
+  it('Badge tem as variantes neutral e highlight, que usam os tokens semânticos novos', () => {
+    render(<><Badge variant="neutral">n</Badge><Badge variant="highlight">h</Badge></>)
+    expect(screen.getByText('n').className).toContain('bg-neutral-subtle')
+    expect(screen.getByText('h').className).toContain('bg-highlight-subtle')
+    expect(screen.getByText('h').className).toContain('border-highlight-border')
+  })
 })
 
 describe('Alert', () => {
@@ -65,6 +73,11 @@ describe('Alert', () => {
     render(<><Alert variant="danger">erro</Alert><Alert variant="warning">aviso</Alert><Alert variant="info">info</Alert><Alert variant="success">ok</Alert></>)
     expect(screen.getAllByRole('alert')).toHaveLength(2)
     expect(screen.getAllByRole('status')).toHaveLength(2)
+  })
+  it('neutral e highlight anunciam como status', () => {
+    render(<><Alert variant="neutral">n</Alert><Alert variant="highlight">h</Alert></>)
+    expect(screen.getAllByRole('status')).toHaveLength(2)
+    expect(screen.getByText('h').className).toContain('bg-highlight-subtle')
   })
   it('não tem violação com título e descrição', async () => {
     const { container } = render(<Alert variant="danger"><AlertTitle>Sem conexão</AlertTitle><AlertDescription>Conecte o celular e tente de novo.</AlertDescription></Alert>)

@@ -11,6 +11,8 @@ export const Variantes: Story = {
       <Badge>Padrão</Badge>
       <Badge variant="secondary">Secundário</Badge>
       <Badge variant="outline">Contorno</Badge>
+      <Badge variant="neutral">Rascunho</Badge>
+      <Badge variant="highlight">Construído pelo cliente</Badge>
       <Badge variant="info">Aguardando peça</Badge>
       <Badge variant="success">Respondeu 10:12</Badge>
       <Badge variant="warning">Aguardando há 5 h</Badge>

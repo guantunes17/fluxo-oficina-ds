@@ -8,6 +8,8 @@ export const badgeVariants = cva('inline-flex items-center rounded-full border p
       default: 'border-transparent bg-primary text-primary-foreground',
       secondary: 'border-transparent bg-secondary text-secondary-foreground',
       outline: 'border-border text-foreground',
+      neutral: 'border-neutral-border bg-neutral-subtle text-neutral-foreground',
+      highlight: 'border-highlight-border bg-highlight-subtle text-highlight-foreground',
       info: 'border-info-border bg-info-subtle text-info-foreground',
       success: 'border-success-border bg-success-subtle text-success-foreground',
       warning: 'border-warning-border bg-warning-subtle text-warning-foreground',
