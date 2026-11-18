@@ -118,13 +118,13 @@ describe('Select', () => {
   }
   it('mostra o rótulo do valor no gatilho mesmo com a lista fechada', async () => {
     await render(<Exemplo />)
-    expect(screen.getByRole('combobox', { name: 'Etapa' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: /Etapa/ })).toBeTruthy()
     expect(screen.getByText('Aguardando peça')).toBeTruthy()
   })
   it('abre, escolhe uma opção e fecha', async () => {
     const onValueChange = jest.fn()
     await render(<Exemplo onValueChange={onValueChange} />)
-    await fireEvent.press(screen.getByRole('combobox', { name: 'Etapa' }))
+    await fireEvent.press(screen.getByRole('button', { name: /Etapa/ }))
     await fireEvent.press(screen.getByRole('menuitem', { name: /Execução/ }))
     expect(onValueChange).toHaveBeenCalledWith('exec')
     expect(screen.getAllByText('Execução').length).toBeGreaterThan(0)
@@ -230,13 +230,15 @@ describe('ToggleGroup', () => {
   it('escolhe uma etapa na variante cartão e avisa', async () => {
     const onValueChange = jest.fn()
     await render(
-      <ToggleGroup variant="card" defaultValue="diag" onValueChange={onValueChange}>
+      <ToggleGroup variant="card" defaultValue="diag" onValueChange={onValueChange} accessibilityLabel="Nova etapa">
         <ToggleGroupItem value="diag" accessibilityLabel="Diagnóstico"><Text>Diagnóstico</Text></ToggleGroupItem>
         <ToggleGroupItem value="exec" accessibilityLabel="Execução"><Text>Execução</Text></ToggleGroupItem>
       </ToggleGroup>,
     )
-    await fireEvent.press(screen.getByLabelText('Execução'))
+    expect(screen.getByRole('radio', { name: 'Diagnóstico' })).toBeChecked()
+    await fireEvent.press(screen.getByRole('radio', { name: 'Execução' }))
     expect(onValueChange).toHaveBeenCalledWith('exec')
+    expect(screen.getByRole('radio', { name: 'Execução' })).toBeChecked()
   })
 })
 
@@ -252,9 +254,10 @@ describe('NumberStepper', () => {
     expect(screen.getByText('2')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Diminuir peça' })).toBeEnabled()
   })
-  it('expõe o valor para leitores de tela', async () => {
+  it('agrupa os dois botões sob o nome do que está sendo contado', async () => {
     await render(<NumberStepper value={3} onChange={() => {}} label="peça" min={1} max={9} />)
-    expect(screen.getByRole('adjustable', { name: 'peça' }).props.accessibilityValue).toEqual({ min: 1, max: 9, now: 3 })
+    expect(screen.getByLabelText('peça')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Aumentar peça' })).toBeEnabled()
   })
 })
 

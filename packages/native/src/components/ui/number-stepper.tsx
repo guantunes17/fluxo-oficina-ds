@@ -17,18 +17,7 @@ export interface NumberStepperProps {
 
 export function NumberStepper({ value, onChange, min = 1, max = 99, step = 1, label = 'quantidade', className }: NumberStepperProps) {
   return (
-    <View
-      accessible
-      accessibilityRole="adjustable"
-      accessibilityLabel={label}
-      accessibilityValue={{ min, max, now: value }}
-      accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
-      onAccessibilityAction={(e) => {
-        if (e.nativeEvent.actionName === 'increment') onChange(Math.min(max, value + step))
-        if (e.nativeEvent.actionName === 'decrement') onChange(Math.max(min, value - step))
-      }}
-      className={cn('flex-row items-center gap-2', className)}
-    >
+    <View role="group" accessibilityLabel={label} className={cn('flex-row items-center gap-2', className)}>
       <Button variant="outline" size="icon" accessibilityLabel={`Diminuir ${label}`} disabled={value <= min} onPress={() => onChange(Math.max(min, value - step))}>
         <Text>−</Text>
       </Button>

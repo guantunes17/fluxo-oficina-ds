@@ -62,6 +62,9 @@ test('o preset do Tailwind exporta cores semânticas por variável e as família
   assert.equal(preset.theme.extend.colors.primary, 'var(--primary)')
   assert.equal(preset.theme.extend.fontFamily.sans[0], 'Inter_400Regular')
   assert.equal(preset.theme.extend.minHeight.touch, '44px')
+  // As classes h-touch e w-touch (botão de ícone) precisam existir, senão o botão colapsa.
+  assert.equal(preset.theme.extend.height.touch, '44px')
+  assert.equal(preset.theme.extend.width.touch, '44px')
 })
 
 test('a fonte padrão é sans serif e termina em sans-serif', () => {

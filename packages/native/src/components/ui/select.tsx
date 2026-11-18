@@ -44,12 +44,17 @@ export function Select({ value, defaultValue = '', onValueChange, defaultOpen = 
   return <SelectContext.Provider value={ctx}>{children}</SelectContext.Provider>
 }
 
-export function SelectTrigger({ className, children, ...props }: React.ComponentProps<typeof Pressable>) {
-  const { open, setOpen } = useSelect()
+export function SelectTrigger({ className, children, accessibilityLabel, ...props }: React.ComponentProps<typeof Pressable>) {
+  const { open, setOpen, value, labels } = useSelect()
+  // O nome acessível precisa conter o texto visível (o valor escolhido), então o rótulo do campo vem junto dele.
+  const rotulo = value ? (labels[value] ?? value) : undefined
+  const nome = accessibilityLabel ? (rotulo ? `${accessibilityLabel}, ${rotulo}` : accessibilityLabel) : undefined
   return (
     <Pressable
-      accessibilityRole="combobox"
-      accessibilityState={{ expanded: open }}
+      accessibilityLabel={nome}
+      accessibilityRole="button"
+      aria-haspopup="listbox"
+      aria-expanded={open}
       onPress={() => setOpen(true)}
       className={cn('min-h-touch w-full flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-3', className)}
       {...props}

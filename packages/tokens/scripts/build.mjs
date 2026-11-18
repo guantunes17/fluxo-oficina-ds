@@ -139,6 +139,8 @@ const preset = {
       spacing: Object.fromEntries(Object.entries(tokens.spacing).map(([k, v]) => [`t${k}`, `${v}px`])),
       minHeight: { touch: `${tokens.touch['min-native']}px` },
       minWidth: { touch: `${tokens.touch['min-native']}px` },
+      height: { touch: `${tokens.touch['min-native']}px` },
+      width: { touch: `${tokens.touch['min-native']}px` },
     },
   },
 }

@@ -8,7 +8,7 @@ import { Text } from './text'
  * então cada linha é um bloco de células com rótulo. A API espelha a do web: Header, Row, Head, Cell.
  */
 export function DataList({ className, ...props }: React.ComponentProps<typeof View>) {
-  return <View accessibilityRole="list" className={cn('w-full', className)} {...props} />
+  return <View className={cn('w-full', className)} {...props} />
 }
 export function DataListHeader({ className, ...props }: React.ComponentProps<typeof View>) {
   return <View className={cn('flex-row border-b border-border px-3 py-2', className)} {...props} />
