@@ -15,6 +15,9 @@ import {
   RadioGroup, RadioGroupItem, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Separator, Sheet, SheetContent,
   SheetDescription, SheetHeader, SheetTitle, SheetTrigger, Skeleton, Tabs, TabsContent, TabsList, TabsTrigger, Text,
   ToggleGroup, ToggleGroupItem, Toaster, toast,
+  Accordion, AccordionContent, AccordionItem, AccordionTrigger, AlertList, Avatar, DropdownMenu, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuTrigger, OrderCard, Popover, PopoverContent, PopoverTrigger, PriorityBadge, Progress,
+  StatusDot, Switch, Textarea,
 } from '@fluxo-oficina/native'
 
 const etapas = ['Diagnóstico', 'Aguardando peça', 'Aprovação do cliente', 'Execução', 'Pronto']
@@ -170,6 +173,59 @@ export default function App() {
           <Separator />
           <View className="h-5 flex-row items-center gap-3"><Text className="text-sm">Peças</Text><Separator orientation="vertical" /><Text className="text-sm">Cotação</Text><Separator orientation="vertical" /><Text className="text-sm">Avisos</Text></View>
         </Secao>
+        <Secao titulo="Textarea e Switch">
+          <View className="gap-1.5"><Label>Observação do mecânico</Label><Textarea accessibilityLabel="Observação do mecânico" placeholder="Descreva o barulho, quando acontece e onde" /></View>
+          <View className="flex-row items-center justify-between gap-3">
+            <Text>Avisar o cliente por WhatsApp</Text>
+            <Switch accessibilityLabel="Avisar o cliente por WhatsApp" defaultChecked />
+          </View>
+        </Secao>
+
+        <Secao titulo="Progress">
+          <Progress accessibilityLabel="Etapas da ordem" value={40} />
+          <Progress accessibilityLabel="Peças recebidas" value={100} tone="success" />
+          <Progress accessibilityLabel="Prazo consumido" value={75} tone="warning" />
+        </Secao>
+
+        <Secao titulo="Accordion">
+          <Accordion type="single" collapsible defaultValue={['pecas']}>
+            <AccordionItem value="pecas"><AccordionTrigger><Text className="font-sans-medium">Peças da cotação</Text></AccordionTrigger><AccordionContent><Text className="text-muted-foreground">Pastilha de freio dianteira e disco ventilado.</Text></AccordionContent></AccordionItem>
+            <AccordionItem value="fornecedores"><AccordionTrigger><Text className="font-sans-medium">Fornecedores consultados</Text></AccordionTrigger><AccordionContent><Text className="text-muted-foreground">Casa do Freio e Auto Peças Brasil.</Text></AccordionContent></AccordionItem>
+          </Accordion>
+        </Secao>
+
+        <Secao titulo="Popover e DropdownMenu">
+          <View className="flex-row gap-2">
+            <Popover>
+              <PopoverTrigger className="min-h-touch justify-center rounded-md border border-border px-4"><Text>Ver prazo</Text></PopoverTrigger>
+              <PopoverContent><Text className="font-sans-medium">Prazo estimado</Text><Text className="text-muted-foreground">Três dias úteis após a aprovação do cliente.</Text></PopoverContent>
+            </Popover>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="min-h-touch justify-center rounded-md border border-border px-4"><Text>Ações da ordem</Text></DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>Mudar etapa</DropdownMenuItem>
+                <DropdownMenuItem>Pedir cotação</DropdownMenuItem>
+                <DropdownMenuItem destructive>Cancelar ordem</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </View>
+        </Secao>
+
+        <Secao titulo="Avatar, StatusDot e PriorityBadge">
+          <View className="flex-row items-center gap-3"><Avatar name="Carlos Mendes" size="sm" /><Avatar name="Carlos Mendes" /><Avatar name="Ana Paula Souza" size="lg" /></View>
+          <StatusDot tone="success" label="Fornecedor respondeu" />
+          <StatusDot tone="warning" label="Aguardando peça" />
+          <View className="flex-row flex-wrap gap-2"><PriorityBadge priority="low" /><PriorityBadge priority="medium" /><PriorityBadge priority="high" /><PriorityBadge priority="urgent" /></View>
+        </Secao>
+
+        <Secao titulo="AlertList e OrderCard">
+          <AlertList items={[
+            { id: '1', tone: 'danger', title: 'Sem conexão', description: 'O áudio não foi enviado. Conecte o celular e tente de novo.' },
+            { id: '2', tone: 'warning', title: 'Fornecedor sem resposta', description: 'A Casa do Freio não respondeu há 5 horas.' },
+          ]} />
+          <OrderCard number="OS 1042" vehicle="VW Gol 1.0 2019" plate="ABC1D23" customer="Maria Souza" stage="Aguardando peça" priority="high" mechanic="Carlos Mendes" />
+        </Secao>
+
       </ScrollView>
       <BottomTabs value={aba} onValueChange={setAba} items={[{ value: 'gravar', label: 'Gravar' }, { value: 'os', label: 'Minhas OS' }]} />
       <Toaster />

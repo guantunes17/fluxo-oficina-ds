@@ -5,8 +5,8 @@ Design system do FluxoOficina para **web** (React, Tailwind 4) e **Expo** (React
 | Pacote | O que é |
 |---|---|
 | [`@fluxo-oficina/tokens`](packages/tokens) | Fonte única de cor, tipografia, raio, espaço e toque. Gera CSS, Tailwind 4, preset Tailwind 3 (NativeWind) e tema TypeScript |
-| [`@fluxo-oficina/web`](packages/web) | 20 componentes React web (shadcn/ui, Radix, CVA) |
-| [`@fluxo-oficina/native`](packages/native) | 20 componentes React Native (NativeWind, rn-primitives), mesma API do web |
+| [`@fluxo-oficina/web`](packages/web) | 34 componentes React web (shadcn/ui, Radix, CVA) |
+| [`@fluxo-oficina/native`](packages/native) | 31 componentes React Native (NativeWind, rn-primitives), mesma API do web. Tooltip, HoverCard e Kbd ficam só no web |
 | [`apps/storybook`](apps/storybook) | Catálogo web, com teste de contraste no Chrome |
 | [`apps/playground`](apps/playground) | App Expo com o catálogo nativo |
 
@@ -26,14 +26,17 @@ Design system do FluxoOficina para **web** (React, Tailwind 4) e **Expo** (React
 | Borda | `border-strong` |
 | Interação | `primary-hover`, `primary-active`, `link`, `link-hover` |
 | Camada | `overlay` (cor com transparência, usada atrás de Dialog e Sheet) |
-| Famílias de estado | `success`, `warning`, `danger`, `info`, `neutral`, `highlight`, cada uma com `-foreground`, `-subtle` e `-border` |
+| Famílias de estado | `success`, `warning`, `danger`, `info`, `neutral`, `highlight`, cada uma com `-foreground`, `-subtle`, `-border`, `-surface` (o mais claro), `-soft` (tom médio, para seleção e hover) e `-solid-foreground` (texto sobre a cor cheia) |
+| Gráficos | `chart-1` a `chart-5`, com contraste de interface nos dois temas |
+| Menu lateral | `sidebar`, `sidebar-foreground`, `sidebar-border`, `sidebar-accent`, `sidebar-accent-foreground`, `sidebar-primary`, `sidebar-primary-foreground` |
 
 `highlight` (azul) marca o que é diferente dos estados, como "novo" ou "construído por outra equipe". `Badge` e `Alert` têm uma variante para cada família.
 
-- **Contraste:** `npm run contraste` confere 76 pares WCAG (texto ≥ 4,5:1, interface ≥ 3:1), nos dois temas, e falha o build se um reprovar.
-- **Tipografia:** Inter, pesos 400 a 700, escala `xs` a `3xl`, números tabulares em preço e prazo.
+- **Contraste:** `npm run contraste` confere 150 pares WCAG (texto ≥ 4,5:1, interface ≥ 3:1), nos dois temas, e falha o build se um reprovar.
+- **Tipografia:** Inter, pesos 400 a 700, escala `xs` a `3xl`, números tabulares em preço e prazo. Além da escala há 13 papéis, que valem como classe (`text-heading-page`, `text-heading-section`, `text-heading-card`, `text-body`, `text-body-compact`, `text-label`, `text-label-compact`, `text-helper`, `text-caption`, `text-eyebrow`, `text-code`, `text-data`, `text-data-strong`) e já trazem tamanho, entrelinha, peso e espaçamento entre letras. `font-mono` serve para placa e código.
+- **Espaço, sombra e movimento:** espaço em base 4 com meios passos (`0.5`, `1.5`, `2.5`) e até 96, sombras `sm`, `md` e `lg`, três durações e três curvas de easing (`standard`, `enter`, `exit`), breakpoints `sm` 640, `md` 768, `lg` 1024 e `xl` 1280.
 - **Toque:** alvo mínimo de 44 pt no nativo e 36 px no web.
-- **Saídas do build:** `tokens.css`, `tailwind.css` (Tailwind 4), `native.css`, `global.css` e `tailwind.preset.cjs` (NativeWind), e `theme.native.js` com tipos. A história Fundamentos/Tokens do Storybook mostra paletas, superfícies, estados, texto, link e overlay.
+- **Saídas do build:** `tokens.css`, `tailwind.css` (Tailwind 4), `native.css`, `global.css` e `tailwind.preset.cjs` (NativeWind), e `theme.native.js` com tipos. A história Fundamentos/Tokens do Storybook mostra paletas, superfícies, estados (com `surface`, `subtle` e `soft`), papéis de tipografia, gráficos, menu lateral, texto, link e overlay.
 
 ## Matriz de paridade
 
@@ -61,6 +64,22 @@ Os dois pacotes usam os mesmos nomes de componente e as mesmas variantes. As dif
 | 18 | Sheet | sim | sim | Nativo sobe da borda inferior por padrão |
 | 19 | Skeleton | sim | sim | — |
 | 20 | Separator | sim | sim | — |
+| 21 | Textarea | sim | sim | Nativo é `TextInput` multilinha, com `invalid` |
+| 22 | Switch | sim | sim | — |
+| 23 | Progress | sim | sim | Nativo usa `accessibilityValue` |
+| 24 | Accordion | sim | sim | Nativo recebe `value` sempre como lista e não anima |
+| 25 | Popover | sim | sim | Nativo abre numa camada em tela (`Modal`), no lugar do balão |
+| 26 | DropdownMenu | sim | sim | Nativo abre numa folha em tela, igual à lista do Select |
+| 27 | Tooltip | sim | só web | Toque não tem passar o mouse. Mostre o texto na tela |
+| 28 | HoverCard | sim | só web | Mesmo motivo. No celular a prévia vira tela ou Popover |
+| 29 | Kbd | sim | só web | Atalho de teclado só existe no desktop |
+| 30 | Avatar | sim | sim | Iniciais quando não há foto. O nome é o rótulo |
+| 31 | StatusDot | sim | sim | O texto é obrigatório, a cor não basta |
+| 32 | PriorityBadge | sim | sim | Texto e símbolo, não só cor. Níveis `low`, `medium`, `high`, `urgent` |
+| 33 | AlertList | sim | sim | Lista nomeada de avisos, do mais grave ao mais leve |
+| 34 | OrderCard | sim | sim | Placa, cliente, etapa, prioridade e mecânico da ordem |
+
+Os itens 1 a 20 são os componentes que o protótipo usa. Os de 21 a 29 completam a base do shadcn/ui e os de 30 a 34 são compostos do domínio da oficina.
 
 ## Uso
 
@@ -108,11 +127,11 @@ A fonte Inter vem de `@expo-google-fonts/inter` (carregue os pesos 400, 500, 600
 
 | Verificação | Resultado | Limite |
 |---|---|---|
-| Tokens: 76 pares de contraste, claro e escuro | passa | — |
-| Web: 21 testes com axe no jsdom, typecheck e build | passa | O jsdom não mede cor |
-| **Web: contraste no Chrome real**, 32 histórias × 2 temas, regra `color-contrast` ligada | passa, 0 violações | Desliga `region` (marco da página, do app) e `aria-hidden-focus` só no Select aberto (comportamento do Radix) |
+| Tokens: 150 pares de contraste, claro e escuro | passa | — |
+| Web: 37 testes com axe no jsdom, typecheck e build | passa | O jsdom não mede cor |
+| **Web: contraste no Chrome real**, 50 histórias × 2 temas, regra `color-contrast` ligada | passa, 0 violações | Desliga `region` (marco da página, do app) e `aria-hidden-focus` só no Select aberto (comportamento do Radix) |
 | Controle negativo: o teste falha com texto de baixo contraste | passa | — |
-| Nativo: 29 testes de componente (jest-expo), typecheck | passa | Testa papéis, nomes, toque e variantes, não a aparência |
+| Nativo: 43 testes de componente (jest-expo), typecheck | passa | Testa papéis, nomes, toque e variantes, não a aparência |
 | Nativo: `expo export` para iOS, Android e web | compila | Prova o bundle, não o comportamento |
 | **Nativo: catálogo no Chrome via react-native-web**, axe com contraste, claro e escuro | passa, 0 violações | **Não é um aparelho** |
 | **Nativo em aparelho real, simulador ou emulador** | **não verificado** | Esta máquina não tem simulador iOS nem emulador Android. Gestos, teclado, microfone e a fonte nativa ficam por conta de quem rodar `npx expo start` e abrir no Expo Go |

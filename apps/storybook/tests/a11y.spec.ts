@@ -30,7 +30,7 @@ test.describe('contraste e acessibilidade no Chrome', () => {
 
   test('há uma história por componente', () => {
     const componentes = new Set(historias.map((h) => h.title))
-    expect(componentes.size).toBeGreaterThanOrEqual(20)
+    expect(componentes.size).toBeGreaterThanOrEqual(34)
   })
 
   for (const tema of temas) {
