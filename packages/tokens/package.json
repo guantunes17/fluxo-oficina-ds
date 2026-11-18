@@ -1,0 +1,22 @@
+{
+  "name": "@fluxo-oficina/tokens",
+  "version": "0.0.0",
+  "description": "Tokens de cor, tipografia, espaço e raio do design system FluxoOficina.",
+  "license": "MIT",
+  "type": "module",
+  "files": ["dist", "src"],
+  "exports": {
+    "./tokens.json": "./src/tokens.json",
+    "./tokens.css": "./dist/tokens.css",
+    "./tailwind.css": "./dist/tailwind.css",
+    "./native": {
+      "types": "./dist/theme.native.d.ts",
+      "default": "./dist/theme.native.js"
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs && node scripts/contraste.mjs",
+    "contraste": "node scripts/contraste.mjs",
+    "test": "node --test test/*.test.mjs"
+  }
+}
