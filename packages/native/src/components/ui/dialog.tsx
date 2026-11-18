@@ -37,7 +37,7 @@ export function DialogContent({ className, children }: { className?: string; chi
   const { open, setOpen } = useDialog()
   return (
     <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
-      <View className="flex-1 items-center justify-center bg-neutro-950/50 p-4">
+      <View className="flex-1 items-center justify-center bg-overlay p-4">
         <View accessibilityViewIsModal role="alertdialog" className={cn('w-full max-w-md gap-4 rounded-lg border border-border bg-popover p-6', className)}>
           {children}
         </View>

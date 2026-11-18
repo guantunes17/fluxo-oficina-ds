@@ -35,6 +35,7 @@ describe('Button', () => {
   it('aplica variante e tamanho', async () => {
     expect(buttonVariants({ variant: 'destructive' })).toContain('bg-destructive')
     expect(buttonVariants({ size: 'icon' })).toContain('w-touch')
+    expect(buttonVariants()).toContain('active:bg-primary-active')
   })
   it('dispara o toque e respeita o disabled', async () => {
     const onPress = jest.fn()
@@ -60,6 +61,12 @@ describe('Card, Badge, Separator e Skeleton', () => {
     expect(screen.getByTestId('s').props.className).toContain('bg-success-subtle')
     expect(screen.getByTestId('w').props.className).toContain('bg-warning-subtle')
     expect(screen.getByTestId('d').props.className).toContain('bg-danger-subtle')
+  })
+  it('Badge tem as variantes neutral e highlight, que usam os tokens semânticos novos', async () => {
+    await render(<><Badge testID="n" variant="neutral" /><Badge testID="h" variant="highlight" /></>)
+    expect(screen.getByTestId('n').props.className).toContain('bg-neutral-subtle')
+    expect(screen.getByTestId('h').props.className).toContain('bg-highlight-subtle')
+    expect(screen.getByTestId('h').props.className).toContain('border-highlight-border')
   })
   it('Separator existe e Skeleton fica fora da leitura de tela', async () => {
     await render(<><Separator testID="sep" /><Skeleton testID="sk" className="h-4 w-20" /></>)

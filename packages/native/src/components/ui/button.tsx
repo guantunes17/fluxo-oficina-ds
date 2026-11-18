@@ -4,10 +4,10 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '../../lib/utils'
 import { TextClassContext } from './text'
 
-export const buttonVariants = cva('flex-row items-center justify-center gap-2 rounded-md active:opacity-80', {
+export const buttonVariants = cva('flex-row items-center justify-center gap-2 rounded-md active:opacity-90', {
   variants: {
     variant: {
-      default: 'bg-primary',
+      default: 'bg-primary active:bg-primary-active',
       secondary: 'bg-secondary',
       outline: 'border border-input bg-background',
       ghost: '',

@@ -42,7 +42,7 @@ export function SheetContent({ className, side, children }: { className?: string
   const { open, setOpen } = useSheet()
   return (
     <Modal visible={open} transparent animationType={side === 'right' ? 'fade' : 'slide'} onRequestClose={() => setOpen(false)}>
-      <Pressable accessibilityLabel="Fechar" onPress={() => setOpen(false)} className={cn('flex-1 bg-neutro-950/50', side === 'right' ? 'flex-row' : 'justify-end')}>
+      <Pressable accessibilityLabel="Fechar" onPress={() => setOpen(false)} className={cn('flex-1 bg-overlay', side === 'right' ? 'flex-row' : 'justify-end')}>
         <Pressable accessible={false} accessibilityViewIsModal className={cn(sheetVariants({ side }), className)}>
           {children}
           <Pressable accessibilityRole="button" accessibilityLabel="Fechar" onPress={() => setOpen(false)} className="min-h-touch items-center justify-center rounded-md border border-input">

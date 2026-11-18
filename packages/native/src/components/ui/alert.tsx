@@ -7,6 +7,8 @@ import { Text, TextClassContext } from './text'
 export const alertVariants = cva('w-full rounded-lg border px-4 py-3', {
   variants: {
     variant: {
+      neutral: 'border-neutral-border bg-neutral-subtle',
+      highlight: 'border-highlight-border bg-highlight-subtle',
       info: 'border-info-border bg-info-subtle',
       success: 'border-success-border bg-success-subtle',
       warning: 'border-warning-border bg-warning-subtle',
@@ -18,7 +20,7 @@ export const alertVariants = cva('w-full rounded-lg border px-4 py-3', {
 
 const alertTextVariants = cva('text-sm', {
   variants: {
-    variant: { info: 'text-info-foreground', success: 'text-success-foreground', warning: 'text-warning-foreground', danger: 'text-danger-foreground' },
+    variant: { neutral: 'text-neutral-foreground', highlight: 'text-highlight-foreground', info: 'text-info-foreground', success: 'text-success-foreground', warning: 'text-warning-foreground', danger: 'text-danger-foreground' },
   },
   defaultVariants: { variant: 'info' },
 })

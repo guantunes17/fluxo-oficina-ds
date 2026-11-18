@@ -12,7 +12,7 @@ export function Input({ className, invalid, editable = true, ...props }: InputPr
   return (
     <TextInput
       editable={editable}
-      placeholderTextColor={cores.mutedForeground}
+      placeholderTextColor={cores.foregroundSubtle}
       aria-invalid={invalid}
       accessibilityState={{ disabled: !editable }}
       className={cn('min-h-touch w-full rounded-md border border-input bg-background px-3 font-sans text-base text-foreground', invalid && 'border-danger', !editable && 'opacity-50', className)}

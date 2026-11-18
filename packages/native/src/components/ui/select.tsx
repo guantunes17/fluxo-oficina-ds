@@ -78,7 +78,7 @@ export function SelectContent({ children }: { children?: React.ReactNode }) {
       {/* Montadas e escondidas: registram o rótulo de cada opção. */}
       {open ? null : <View style={{ display: 'none' }}>{children}</View>}
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
-        <Pressable accessibilityLabel="Fechar a lista" onPress={() => setOpen(false)} className="flex-1 justify-end bg-neutro-950/50">
+        <Pressable accessibilityLabel="Fechar a lista" onPress={() => setOpen(false)} className="flex-1 justify-end bg-overlay">
           <Pressable accessible={false} className="max-h-[70%] rounded-t-xl border-t border-border bg-popover p-2 pb-6">
             <View accessibilityRole="menu" className="gap-0.5">{children}</View>
           </Pressable>

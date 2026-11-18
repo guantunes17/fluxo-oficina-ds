@@ -4,7 +4,7 @@ import { cn } from '../../lib/utils'
 import { Text } from './text'
 
 export function Card({ className, ...props }: React.ComponentProps<typeof View>) {
-  return <View className={cn('rounded-lg border border-border bg-card', className)} {...props} />
+  return <View className={cn('rounded-lg border border-border bg-surface-raised', className)} {...props} />
 }
 export function CardHeader({ className, ...props }: React.ComponentProps<typeof View>) {
   return <View className={cn('gap-1.5 p-5', className)} {...props} />

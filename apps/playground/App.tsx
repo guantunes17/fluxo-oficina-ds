@@ -69,12 +69,16 @@ export default function App() {
               <Badge variant="warning"><Text>Aguardando há 5 h</Text></Badge>
               <Badge variant="danger"><Text>Cancelada</Text></Badge>
               <Badge variant="outline"><Text>Contorno</Text></Badge>
+              <Badge variant="neutral"><Text>Rascunho</Text></Badge>
+              <Badge variant="highlight"><Text>Construído pelo cliente</Text></Badge>
             </CardContent>
             <CardFooter><Button size="sm"><Text>Mudar etapa</Text></Button></CardFooter>
           </Card>
         </Secao>
 
         <Secao titulo="Alert">
+          <Alert variant="neutral"><AlertTitle>Rascunho</AlertTitle><AlertDescription>A EF Macro segue em rascunho.</AlertDescription></Alert>
+          <Alert variant="highlight"><AlertTitle>Novo</AlertTitle><AlertDescription>Componente que o cliente constrói.</AlertDescription></Alert>
           <Alert variant="info"><AlertTitle>Etapa salva</AlertTitle><AlertDescription>O cliente recebe um aviso por WhatsApp.</AlertDescription></Alert>
           <Alert variant="success"><AlertTitle>Lista enviada</AlertTitle><AlertDescription>O gerente já pode pedir a cotação.</AlertDescription></Alert>
           <Alert variant="warning"><AlertTitle>Fornecedor sem resposta</AlertTitle><AlertDescription>A Casa do Freio não respondeu há 5 horas.</AlertDescription></Alert>
