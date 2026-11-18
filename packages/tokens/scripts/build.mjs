@@ -29,6 +29,15 @@ const estrutura = [
   `  --font-sans: ${fonte};`,
   ...Object.entries(tokens.font.weight).map(([k, v]) => `  --font-weight-${k}: ${v};`),
   ...Object.entries(tokens.font.size).flatMap(([k, [t, l]]) => [`  --text-${k}: ${px(t)};`, `  --text-${k}--line-height: ${px(l)};`]),
+  `  --font-mono: ${tokens.font.mono.join(', ')};`,
+  ...Object.entries(tokens.font.role).flatMap(([k, r]) => [
+    `  --role-${k}-size: ${px(tokens.font.size[r.size][0])};`,
+    `  --role-${k}-line: ${px(tokens.font.size[r.size][1])};`,
+    `  --role-${k}-weight: ${tokens.font.weight[r.weight]};`,
+    `  --role-${k}-tracking: ${r.tracking}em;`,
+  ]),
+  ...Object.entries(tokens.easing).map(([k, v]) => `  --ease-${k}: ${v};`),
+  ...Object.entries(tokens.breakpoint).map(([k, v]) => `  --breakpoint-${k}: ${px(v)};`),
   ...Object.entries(tokens.radius).map(([k, v]) => `  --radius-${k}: ${px(v)};`),
   ...Object.entries(tokens.spacing).map(([k, v]) => `  --space-${k}: ${px(v)};`),
   ...Object.entries(tokens.shadow).map(([k, v]) => `  --shadow-${k}: ${v};`),
@@ -63,6 +72,19 @@ ${mapaPaleta.join('\n')}
 ${Object.keys(tokens.radius).map((k) => `  --radius-${k}: var(--radius-${k});`).join('\n')}
 ${Object.keys(tokens.font.size).flatMap((k) => [`  --text-${k}: var(--text-${k});`, `  --text-${k}--line-height: var(--text-${k}--line-height);`]).join('\n')}
 ${Object.keys(tokens.shadow).map((k) => `  --shadow-${k}: var(--shadow-${k});`).join('\n')}
+  --font-mono: var(--font-mono);
+${Object.entries(tokens.font.role).flatMap(([k, r]) => [
+    `  --text-${k}: var(--role-${k}-size);`,
+    `  --text-${k}--line-height: var(--role-${k}-line);`,
+    `  --text-${k}--font-weight: var(--role-${k}-weight);`,
+    `  --text-${k}--letter-spacing: var(--role-${k}-tracking);`,
+  ]).join('\n')}
+${Object.keys(tokens.easing).map((k) => `  --ease-${k}: var(--ease-${k});`).join('\n')}
+${Object.keys(tokens.breakpoint).map((k) => `  --breakpoint-${k}: var(--breakpoint-${k});`).join('\n')}
+  --animate-accordion-down: accordion-down var(--motion-base) var(--ease-standard);
+  --animate-accordion-up: accordion-up var(--motion-base) var(--ease-standard);
+  @keyframes accordion-down { from { height: 0; } to { height: var(--radix-accordion-content-height); } }
+  @keyframes accordion-up { from { height: var(--radix-accordion-content-height); } to { height: 0; } }
 }
 `
 writeFileSync(join(dist, 'tailwind.css'), tailwind)
@@ -78,6 +100,8 @@ const tema = {
     weight: tokens.font.weight,
     size: Object.fromEntries(Object.entries(tokens.font.size).map(([k, [fontSize, lineHeight]]) => [k, { fontSize, lineHeight }])),
   },
+  role: Object.fromEntries(Object.entries(tokens.font.role).map(([k, r]) => [k, { fontSize: tokens.font.size[r.size][0], lineHeight: tokens.font.size[r.size][1], weight: r.weight, letterSpacing: Math.round(r.tracking * tokens.font.size[r.size][0] * 100) / 100, mono: !!r.mono }])),
+  breakpoint: tokens.breakpoint,
   radius: tokens.radius,
   spacing: tokens.spacing,
   motion: tokens.motion,
@@ -96,6 +120,8 @@ export interface Theme {
     weight: Record<'regular' | 'medium' | 'semibold' | 'bold', number>
     size: Record<string, { fontSize: number; lineHeight: number }>
   }
+  role: Record<string, { fontSize: number; lineHeight: number; weight: string; letterSpacing: number; mono: boolean }>
+  breakpoint: Record<string, number>
   radius: Record<string, number>
   spacing: Record<string, number>
   motion: Record<string, number>
@@ -135,7 +161,13 @@ const preset = {
         'sans-semibold': ['Inter_600SemiBold'],
         'sans-bold': ['Inter_700Bold'],
       },
-      fontSize: Object.fromEntries(Object.entries(tokens.font.size).map(([k, [t, l]]) => [k, [`${t}px`, { lineHeight: `${l}px` }]])),
+      fontSize: {
+        ...Object.fromEntries(Object.entries(tokens.font.size).map(([k, [t, l]]) => [k, [`${t}px`, { lineHeight: `${l}px` }]])),
+        ...Object.fromEntries(Object.entries(tokens.font.role).map(([k, r]) => {
+          const [t, l] = tokens.font.size[r.size]
+          return [k, [`${t}px`, { lineHeight: `${l}px`, letterSpacing: `${Math.round(r.tracking * t * 100) / 100}px` }]]
+        })),
+      },
       spacing: Object.fromEntries(Object.entries(tokens.spacing).map(([k, v]) => [`t${k}`, `${v}px`])),
       minHeight: { touch: `${tokens.touch['min-native']}px` },
       minWidth: { touch: `${tokens.touch['min-native']}px` },
