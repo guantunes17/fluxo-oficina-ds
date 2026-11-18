@@ -4,12 +4,20 @@
   "description": "Componentes React web do design system FluxoOficina, baseados no shadcn/ui.",
   "license": "MIT",
   "type": "module",
-  "sideEffects": ["**/*.css"],
-  "files": ["dist", "src/styles.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "src/styles.css"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
     "./styles.css": "./src/styles.css"
   },
   "scripts": {
@@ -37,20 +45,20 @@
     "clsx": "^2.1.0",
     "lucide-react": "^0.460.0",
     "sonner": "^1.7.0",
-    "tailwind-merge": "^2.5.0"
+    "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/jest-dom": "^6.9.0",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "axe-core": "^4.10.0",
-    "jsdom": "^25.0.0",
+    "jsdom": "^31.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tsup": "^8.3.0",
+    "tsup": "^9.0.0",
     "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
+    "vitest": "^5.1.0"
   }
 }
