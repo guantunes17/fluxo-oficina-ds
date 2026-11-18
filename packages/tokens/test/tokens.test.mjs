@@ -67,6 +67,25 @@ test('o preset do Tailwind exporta cores semânticas por variável e as família
   assert.equal(preset.theme.extend.width.touch, '44px')
 })
 
+test('cada família de estado traz base, foreground, subtle e border nos dois temas', () => {
+  const familias = ['success', 'warning', 'danger', 'info', 'neutral', 'highlight']
+  for (const tema of ['light', 'dark'])
+    for (const f of familias)
+      for (const sufixo of ['', '-foreground', '-subtle', '-border'])
+        assert.ok(`${f}${sufixo}` in tokens.semantic[tema], `${tema}: falta ${f}${sufixo}`)
+})
+
+test('os tokens de superfície, texto, borda, interação e overlay existem nos dois temas', () => {
+  const nomes = ['surface', 'surface-raised', 'surface-sunken', 'foreground-subtle', 'foreground-disabled', 'border-strong', 'primary-hover', 'primary-active', 'link', 'link-hover', 'overlay']
+  for (const tema of ['light', 'dark'])
+    for (const n of nomes) assert.ok(n in tokens.semantic[tema], `${tema}: falta ${n}`)
+})
+
+test('a paleta azul, que substitui o roxo, tem todos os passos e nenhuma escala roxa', () => {
+  assert.deepEqual(Object.keys(tokens.color.azul), ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'])
+  for (const nome of Object.keys(tokens.color)) assert.doesNotMatch(nome, /roxo|purple|violet|violeta/i)
+})
+
 test('a fonte padrão é sans serif e termina em sans-serif', () => {
   assert.equal(tokens.font.sans[0], 'Inter')
   assert.equal(tokens.font.sans.at(-1), 'sans-serif')
