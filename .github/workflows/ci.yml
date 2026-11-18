@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  pacotes:
+    name: Tokens, web e nativo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run build -w @fluxo-oficina/tokens
+      - run: npm run build -w @fluxo-oficina/web
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run audit:publico
+
+  navegador:
+    name: Storybook e playground no Chrome
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run build -w @fluxo-oficina/tokens
+      - run: npm run build -w @fluxo-oficina/web
+      # O Chrome já vem na imagem do GitHub Actions; o Playwright usa channel: 'chrome'.
+      - run: npm run test:browser
+      - run: npm run build -w @fluxo-oficina/playground
+      - run: npx playwright test
+        working-directory: apps/playground

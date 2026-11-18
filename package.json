@@ -13,7 +13,9 @@
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "contraste": "npm run contraste -w @fluxo-oficina/tokens",
-    "test:browser": "npm run build -w @fluxo-oficina/storybook && npm run test:browser -w @fluxo-oficina/storybook"
+    "test:browser": "npm run build -w @fluxo-oficina/storybook && npm run test:browser -w @fluxo-oficina/storybook",
+    "audit:publico": "node scripts/audit-publicavel.mjs",
+    "typecheck": "npm run typecheck --workspaces --if-present"
   },
   "engines": {
     "node": ">=20"

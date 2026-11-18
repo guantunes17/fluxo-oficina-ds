@@ -204,7 +204,7 @@ describe('ListItem e AppBar', () => {
     const onClick = vi.fn()
     const { container } = render(<ListItem title="OS 1042" description="Gol 1.0 · ABC1D23" trailing={<Badge variant="info">Aguardando peça</Badge>} onClick={onClick} />)
     await userEvent.click(screen.getByRole('button', { name: /OS 1042/ }))
-    expect(onClick).toHaveBeenCalledOnce()
+    expect(onClick).toHaveBeenCalledTimes(1)
     expect(await semViolacoes(container)).toEqual([])
   })
   it('AppBar tem um título de nível 1 e ações', async () => {
