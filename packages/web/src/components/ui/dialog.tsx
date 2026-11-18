@@ -31,8 +31,8 @@ export function DialogTitle({ className, ...props }: React.ComponentProps<typeof
 export function DialogDescription({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Description>) {
   return <AlertDialogPrimitive.Description data-slot="dialog-description" className={cn('text-sm text-muted-foreground', className)} {...props} />
 }
-export function DialogAction({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {
-  return <AlertDialogPrimitive.Action data-slot="dialog-action" className={cn(buttonVariants(), className)} {...props} />
+export function DialogAction({ className, variant, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Action> & { variant?: 'default' | 'destructive' }) {
+  return <AlertDialogPrimitive.Action data-slot="dialog-action" className={cn(buttonVariants({ variant }), className)} {...props} />
 }
 export function DialogCancel({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
   return <AlertDialogPrimitive.Cancel data-slot="dialog-cancel" className={cn(buttonVariants({ variant: 'outline' }), className)} {...props} />

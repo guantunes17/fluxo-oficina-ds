@@ -24,7 +24,7 @@ export function AccordionTrigger({ className, children, ...props }: React.Compon
 }
 export function AccordionContent({ className, children, ...props }: React.ComponentProps<typeof AccordionPrimitive.Content>) {
   return (
-    <AccordionPrimitive.Content data-slot="accordion-content" className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down" {...props}>
+    <AccordionPrimitive.Content data-slot="accordion-content" className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none" {...props}>
       <div className={cn('pb-4 text-muted-foreground', className)}>{children}</div>
     </AccordionPrimitive.Content>
   )

@@ -5,6 +5,13 @@
 @import "@fluxo-oficina/tokens/tokens.css";
 @import "@fluxo-oficina/tokens/tailwind.css";
 
+@layer components {
+  /* Progress indeterminado: a barra anda sobre a trilha. Sem movimento, fica cheia. */
+  .fo-indeterminate { width: 40%; animation: fo-indeterminate 1.2s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .fo-indeterminate { width: 100%; animation: none; } }
+}
+@keyframes fo-indeterminate { from { margin-left: -40%; } to { margin-left: 100%; } }
+
 @layer base {
   * { border-color: var(--border); }
   body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); }

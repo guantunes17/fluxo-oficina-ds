@@ -29,3 +29,7 @@ export function AlertTitle({ className, ...props }: React.ComponentProps<'p'>) {
 export function AlertDescription({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="alert-description" className={cn('text-sm', className)} {...props} />
 }
+/** Ação do aviso, por exemplo "Desfazer". Fica abaixo da descrição. */
+export function AlertAction({ className, ...props }: React.ComponentProps<'div'>) {
+  return <div data-slot="alert-action" className={cn('mt-3 flex flex-wrap items-center gap-2', className)} {...props} />
+}

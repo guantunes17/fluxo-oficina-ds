@@ -12,7 +12,7 @@ export function SelectTrigger({ className, children, ...props }: React.Component
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        'flex h-10 w-full items-center justify-between gap-2 rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-muted-foreground',
+        'flex h-11 w-full items-center justify-between gap-2 rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-surface-sunken disabled:text-muted-foreground aria-[invalid=true]:border-danger data-[placeholder]:text-muted-foreground',
         className,
       )}
       {...props}

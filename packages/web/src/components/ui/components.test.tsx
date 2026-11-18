@@ -11,7 +11,8 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger, AlertList, Avatar, DropdownMenu, DropdownMenuContent,
   DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, HoverCard, HoverCardContent,
   HoverCardTrigger, Kbd, OrderCard, Popover, PopoverContent, PopoverTrigger, PriorityBadge, Progress, StatusDot, Switch,
-  Textarea, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, initialsOf,
+  AlertAction, Disclosure, Empty, EmptyAction, EmptyDescription, EmptyTitle, Field, FieldControl, FieldLabel, FieldMessage,
+  RadioCardItem, maskPlaca, maskTelefone, Textarea, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, initialsOf,
 } from '../../index'
 
 async function semViolacoes(container: HTMLElement) {
@@ -336,5 +337,54 @@ describe('Avatar, StatusDot, PriorityBadge, AlertList e OrderCard', () => {
     const { container } = render(<OrderCard number="OS 1042" vehicle="VW Gol 1.0" plate="ABC1D23" customer="Maria Souza" stage="Aguardando peça" priority="high" mechanic="Carlos" />)
     for (const t of ['OS 1042', 'ABC1D23', 'Maria Souza', 'Aguardando peça', 'Alta', 'Mecânico: Carlos']) expect(screen.getByText(t)).toBeInTheDocument()
     expect(await semViolacoes(container)).toEqual([])
+  })
+})
+
+describe('Rodada 6: padrões vindos do protótipo', () => {
+  it('Button desabilitado tem cor explícita e a variante ghost-destructive existe', () => {
+    expect(buttonVariants()).toContain('disabled:bg-surface-sunken')
+    expect(buttonVariants()).not.toContain('disabled:opacity-50')
+    expect(buttonVariants({ variant: 'ghost-destructive' })).toContain('text-danger-foreground')
+  })
+  it('Field liga rótulo, controle e erro', async () => {
+    const { container } = render(<Field invalid><FieldLabel>Placa</FieldLabel><FieldControl><Input /></FieldControl><FieldMessage>Informe a placa.</FieldMessage></Field>)
+    const campo = screen.getByLabelText('Placa')
+    expect(campo).toHaveAttribute('aria-invalid', 'true')
+    expect(campo.getAttribute('aria-describedby')).toContain(screen.getByRole('alert').id)
+    expect(await semViolacoes(container)).toEqual([])
+  })
+  it('Field sem erro não mostra mensagem nem marca aria-invalid', () => {
+    render(<Field><FieldLabel>Nome</FieldLabel><FieldControl><Input /></FieldControl><FieldMessage>x</FieldMessage></Field>)
+    expect(screen.queryByRole('alert')).toBeNull()
+    expect(screen.getByLabelText('Nome')).not.toHaveAttribute('aria-invalid')
+  })
+  it('Empty anuncia como status e aceita ação', () => {
+    render(<Empty><EmptyTitle>Nenhuma peça</EmptyTitle><EmptyDescription>Adicione por voz.</EmptyDescription><EmptyAction><Button>Adicionar</Button></EmptyAction></Empty>)
+    expect(screen.getByRole('status')).toHaveTextContent('Nenhuma peça')
+    expect(screen.getByRole('button', { name: 'Adicionar' })).toBeInTheDocument()
+  })
+  it('Progress com value={null} fica indeterminado', () => {
+    render(<Progress value={null} aria-label="Transcrevendo" />)
+    const barra = screen.getByRole('progressbar', { name: 'Transcrevendo' })
+    expect(barra).toHaveAttribute('data-state', 'indeterminate')
+    expect(barra.firstElementChild?.className).toContain('fo-indeterminate')
+  })
+  it('AlertAction e Disclosure renderizam', async () => {
+    const { container } = render(<><Alert variant="neutral">Peça removida.<AlertAction><Button size="sm">Desfazer</Button></AlertAction></Alert><Disclosure summary="Nota do protótipo">Texto de apoio</Disclosure></>)
+    expect(screen.getByRole('button', { name: 'Desfazer' })).toBeInTheDocument()
+    expect(container.querySelector('details')).not.toHaveAttribute('open')
+    expect(await semViolacoes(container)).toEqual([])
+  })
+  it('RadioCardItem funciona como radio com aria-checked', async () => {
+    const user = userEvent.setup()
+    render(<RadioGroup aria-label="Etapa" defaultValue="a"><RadioCardItem value="a">Diagnóstico</RadioCardItem><RadioCardItem value="b">Execução</RadioCardItem></RadioGroup>)
+    await user.click(screen.getByRole('radio', { name: 'Execução' }))
+    expect(screen.getByRole('radio', { name: 'Execução' })).toHaveAttribute('aria-checked', 'true')
+  })
+  it('máscaras de telefone e placa', () => {
+    expect(maskTelefone('11900000000')).toBe('(11) 90000-0000')
+    expect(maskTelefone('1190000000')).toBe('(11) 9000-0000')
+    expect(maskTelefone('')).toBe('')
+    expect(maskPlaca('abc-1d23x')).toBe('ABC1D23')
   })
 })
