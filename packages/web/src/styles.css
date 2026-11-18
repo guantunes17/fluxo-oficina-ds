@@ -1,0 +1,11 @@
+/* Folha de entrada do pacote web. O app que consome importa este arquivo depois do Tailwind:
+   @import "tailwindcss";
+   @import "@fluxo-oficina/web/styles.css";
+   O Tailwind do app precisa varrer o pacote: @source "../node_modules/@fluxo-oficina/web/dist"; */
+@import "@fluxo-oficina/tokens/tokens.css";
+@import "@fluxo-oficina/tokens/tailwind.css";
+
+@layer base {
+  * { border-color: var(--border); }
+  body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); }
+}
