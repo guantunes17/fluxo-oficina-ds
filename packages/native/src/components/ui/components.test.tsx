@@ -7,11 +7,18 @@ import {
   NumberStepper, RadioGroup, RadioGroupItem, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Separator,
   Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, Skeleton, Tabs, TabsContent, TabsList,
   TabsTrigger, Text, ToggleGroup, ToggleGroupItem, Toaster, buttonVariants, cn, toast, useControllable,
+  Accordion, AccordionContent, AccordionItem, AccordionTrigger, AlertList, Avatar, DropdownMenu, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuTrigger, OrderCard, Popover, PopoverContent, PopoverTrigger, PriorityBadge, Progress,
+  StatusDot, Switch, Textarea, initialsOf,
 } from '../../index'
 
 describe('utilitários', () => {
   it('cn resolve conflito do Tailwind', async () => {
     expect(cn('px-2', false && 'hidden', 'px-4')).toBe('px-4')
+  })
+  it('papel de tipografia não apaga a cor do texto', async () => {
+    expect(cn('text-base text-foreground', 'text-heading-card')).toBe('text-foreground text-heading-card')
+    expect(cn('text-heading-card', 'text-muted-foreground')).toBe('text-heading-card text-muted-foreground')
   })
   it('useControllable usa o valor de fora quando existe e o interno quando não', async () => {
     function Sonda({ fora }: { fora?: number }) {
@@ -310,5 +317,113 @@ describe('Sheet', () => {
     expect(screen.getByText('Histórico de avisos')).toBeTruthy()
     await fireEvent.press(screen.getAllByRole('button', { name: 'Fechar' })[0]!)
     expect(screen.queryByText('Histórico de avisos')).toBeNull()
+  })
+})
+
+describe('Textarea, Switch e Progress', () => {
+  it('Textarea é multilinha, aceita texto e respeita o invalid', async () => {
+    const onChangeText = jest.fn()
+    await render(<Textarea accessibilityLabel="Observação" invalid onChangeText={onChangeText} />)
+    const campo = screen.getByLabelText('Observação')
+    expect(campo.props.multiline).toBe(true)
+    await fireEvent.changeText(campo, 'Barulho na roda')
+    expect(onChangeText).toHaveBeenCalledWith('Barulho na roda')
+    expect(campo.props.className).toContain('border-danger')
+  })
+  it('Switch alterna e expõe o estado', async () => {
+    const onCheckedChange = jest.fn()
+    await render(<Switch accessibilityLabel="Avisar o cliente" onCheckedChange={onCheckedChange} />)
+    const chave = screen.getByRole('switch', { name: 'Avisar o cliente' })
+    await fireEvent.press(chave)
+    expect(onCheckedChange).toHaveBeenCalledWith(true)
+  })
+  it('Progress expõe o valor e limita entre 0 e 100', async () => {
+    await render(<Progress accessibilityLabel="Etapas concluídas" value={140} />)
+    const barra = screen.getByRole('progressbar', { name: 'Etapas concluídas' })
+    expect(barra.props.accessibilityValue).toEqual({ min: 0, max: 100, now: 100 })
+  })
+})
+
+describe('Accordion, Popover e DropdownMenu', () => {
+  it('Accordion abre e fecha uma seção', async () => {
+    await render(
+      <Accordion type="single" collapsible>
+        <AccordionItem value="a">
+          <AccordionTrigger><Text>Peças</Text></AccordionTrigger>
+          <AccordionContent><Text>Pastilha e disco</Text></AccordionContent>
+        </AccordionItem>
+      </Accordion>,
+    )
+    const gatilho = screen.getByRole('button', { name: /Peças/ })
+    expect(screen.queryByText('Pastilha e disco')).toBeNull()
+    await fireEvent.press(gatilho)
+    expect(screen.getByText('Pastilha e disco')).toBeTruthy()
+    await fireEvent.press(gatilho)
+    expect(screen.queryByText('Pastilha e disco')).toBeNull()
+  })
+  it('Accordion single fecha a seção anterior ao abrir outra', async () => {
+    await render(
+      <Accordion type="single">
+        <AccordionItem value="a"><AccordionTrigger><Text>Peças</Text></AccordionTrigger><AccordionContent><Text>Lista de peças</Text></AccordionContent></AccordionItem>
+        <AccordionItem value="b"><AccordionTrigger><Text>Avisos</Text></AccordionTrigger><AccordionContent><Text>Lista de avisos</Text></AccordionContent></AccordionItem>
+      </Accordion>,
+    )
+    await fireEvent.press(screen.getByRole('button', { name: /Peças/ }))
+    await fireEvent.press(screen.getByRole('button', { name: /Avisos/ }))
+    expect(screen.queryByText('Lista de peças')).toBeNull()
+    expect(screen.getByText('Lista de avisos')).toBeTruthy()
+  })
+  it('Popover abre pelo gatilho', async () => {
+    await render(<Popover><PopoverTrigger><Text>Detalhes</Text></PopoverTrigger><PopoverContent><Text>Prazo de 3 dias</Text></PopoverContent></Popover>)
+    await fireEvent.press(screen.getByRole('button', { name: 'Detalhes' }))
+    expect(await screen.findByText('Prazo de 3 dias')).toBeTruthy()
+  })
+  it('DropdownMenu lista as ações, dispara a escolhida e fecha', async () => {
+    const onSelect = jest.fn()
+    await render(
+      <DropdownMenu>
+        <DropdownMenuTrigger><Text>Ações</Text></DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem onSelect={onSelect}>Mudar etapa</DropdownMenuItem>
+          <DropdownMenuItem destructive>Cancelar ordem</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+    )
+    await fireEvent.press(screen.getByRole('button', { name: 'Ações' }))
+    await fireEvent.press(await screen.findByRole('menuitem', { name: 'Mudar etapa' }))
+    expect(onSelect).toHaveBeenCalled()
+    expect(screen.queryByRole('menuitem', { name: 'Mudar etapa' })).toBeNull()
+  })
+})
+
+describe('Avatar, StatusDot, PriorityBadge, AlertList e OrderCard', () => {
+  it('initialsOf pega a primeira e a última inicial', async () => {
+    expect(initialsOf('Carlos Eduardo Mendes')).toBe('CM')
+    expect(initialsOf('Ana')).toBe('A')
+    expect(initialsOf('  ')).toBe('?')
+  })
+  it('Avatar usa o nome como rótulo e mostra as iniciais sem foto', async () => {
+    await render(<Avatar name="Carlos Mendes" />)
+    expect(screen.getByRole('image', { name: 'Carlos Mendes' })).toBeTruthy()
+    expect(screen.getByText('CM')).toBeTruthy()
+  })
+  it('StatusDot sempre mostra o texto', async () => {
+    await render(<StatusDot tone="success" label="Fornecedor respondeu" />)
+    expect(screen.getByText('Fornecedor respondeu')).toBeTruthy()
+  })
+  it('PriorityBadge leva texto, símbolo e rótulo acessível', async () => {
+    await render(<PriorityBadge priority="urgent" />)
+    expect(screen.getByText('▲ Urgente')).toBeTruthy()
+    expect(screen.getByLabelText('Prioridade urgente')).toBeTruthy()
+  })
+  it('AlertList é uma lista nomeada de avisos', async () => {
+    await render(<AlertList items={[{ id: '1', tone: 'danger', title: 'Sem conexão' }, { id: '2', tone: 'info', title: 'Etapa salva', description: 'Cliente avisado' }]} />)
+    expect(screen.getByLabelText('Avisos')).toBeTruthy()
+    expect(screen.getByText('Sem conexão')).toBeTruthy()
+    expect(screen.getByText('Cliente avisado')).toBeTruthy()
+  })
+  it('OrderCard mostra placa, cliente, etapa e prioridade', async () => {
+    await render(<OrderCard number="OS 1042" vehicle="VW Gol 1.0" plate="ABC1D23" customer="Maria Souza" stage="Aguardando peça" priority="high" mechanic="Carlos" />)
+    for (const t of ['OS 1042', 'ABC1D23', 'Maria Souza', 'Aguardando peça', '△ Alta', 'Mecânico: Carlos']) expect(screen.getByText(t)).toBeTruthy()
   })
 })
