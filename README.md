@@ -14,10 +14,26 @@ Design system do FluxoOficina para **web** (React, Tailwind 4) e **Expo** (React
 
 ## Tokens
 
-- **Cor:** petróleo (primária), âmbar (apoio), neutro frio, verde e vermelho, em escalas 50 a 950. Tokens semânticos no padrão do shadcn (`background`, `primary`, `muted`…), mais os estados `success`, `warning`, `danger` e `info`, cada um com `-foreground`, `-subtle` e `-border`. Temas claro e escuro.
-- **Contraste:** `npm run contraste` confere 40 pares WCAG (texto ≥ 4,5:1, interface ≥ 3:1) e falha o build se um reprovar.
+**Paletas (escalas 50 a 950):** petróleo (primária), âmbar (apoio), neutro frio, verde, azul (cobalto, para destaque) e vermelho. Não há escala roxa.
+
+**Tokens semânticos**, nos temas claro e escuro, no padrão do shadcn mais as famílias abaixo:
+
+| Grupo | Tokens |
+|---|---|
+| Base do shadcn | `background`, `foreground`, `card`, `popover`, `primary`, `secondary`, `muted`, `accent`, `destructive`, `border`, `input`, `ring` (cada um com `-foreground` quando é fundo) |
+| Superfície | `surface`, `surface-raised`, `surface-sunken` |
+| Texto | `foreground-subtle` (placeholder), `foreground-disabled` (sem exigência de contraste) |
+| Borda | `border-strong` |
+| Interação | `primary-hover`, `primary-active`, `link`, `link-hover` |
+| Camada | `overlay` (cor com transparência, usada atrás de Dialog e Sheet) |
+| Famílias de estado | `success`, `warning`, `danger`, `info`, `neutral`, `highlight`, cada uma com `-foreground`, `-subtle` e `-border` |
+
+`highlight` (azul) marca o que é diferente dos estados, como "novo" ou "construído por outra equipe". `Badge` e `Alert` têm uma variante para cada família.
+
+- **Contraste:** `npm run contraste` confere 76 pares WCAG (texto ≥ 4,5:1, interface ≥ 3:1), nos dois temas, e falha o build se um reprovar.
 - **Tipografia:** Inter, pesos 400 a 700, escala `xs` a `3xl`, números tabulares em preço e prazo.
 - **Toque:** alvo mínimo de 44 pt no nativo e 36 px no web.
+- **Saídas do build:** `tokens.css`, `tailwind.css` (Tailwind 4), `native.css`, `global.css` e `tailwind.preset.cjs` (NativeWind), e `theme.native.js` com tipos. A história Fundamentos/Tokens do Storybook mostra paletas, superfícies, estados, texto, link e overlay.
 
 ## Matriz de paridade
 
@@ -92,11 +108,11 @@ A fonte Inter vem de `@expo-google-fonts/inter` (carregue os pesos 400, 500, 600
 
 | Verificação | Resultado | Limite |
 |---|---|---|
-| Tokens: 40 pares de contraste, claro e escuro | passa | — |
-| Web: 19 testes com axe no jsdom, typecheck e build | passa | O jsdom não mede cor |
-| **Web: contraste no Chrome real**, 28 histórias × 2 temas, regra `color-contrast` ligada | passa, 0 violações | Desliga `region` (marco da página, do app) e `aria-hidden-focus` só no Select aberto (comportamento do Radix) |
+| Tokens: 76 pares de contraste, claro e escuro | passa | — |
+| Web: 21 testes com axe no jsdom, typecheck e build | passa | O jsdom não mede cor |
+| **Web: contraste no Chrome real**, 32 histórias × 2 temas, regra `color-contrast` ligada | passa, 0 violações | Desliga `region` (marco da página, do app) e `aria-hidden-focus` só no Select aberto (comportamento do Radix) |
 | Controle negativo: o teste falha com texto de baixo contraste | passa | — |
-| Nativo: 28 testes de componente (jest-expo), typecheck | passa | Testa papéis, nomes, toque e variantes, não a aparência |
+| Nativo: 29 testes de componente (jest-expo), typecheck | passa | Testa papéis, nomes, toque e variantes, não a aparência |
 | Nativo: `expo export` para iOS, Android e web | compila | Prova o bundle, não o comportamento |
 | **Nativo: catálogo no Chrome via react-native-web**, axe com contraste, claro e escuro | passa, 0 violações | **Não é um aparelho** |
 | **Nativo em aparelho real, simulador ou emulador** | **não verificado** | Esta máquina não tem simulador iOS nem emulador Android. Gestos, teclado, microfone e a fonte nativa ficam por conta de quem rodar `npx expo start` e abrir no Expo Go |
