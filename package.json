@@ -12,7 +12,8 @@
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "contraste": "npm run contraste -w @fluxo-oficina/tokens"
+    "contraste": "npm run contraste -w @fluxo-oficina/tokens",
+    "test:browser": "npm run build -w @fluxo-oficina/storybook && npm run test:browser -w @fluxo-oficina/storybook"
   },
   "engines": {
     "node": ">=20"
